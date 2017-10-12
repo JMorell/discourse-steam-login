@@ -19,7 +19,7 @@ class SteamAuthenticator < ::Auth::Authenticator
     raw_info = auth_token["extra"]["raw_info"]
     steam_uid = auth_token["uid"]
 
-    current_info = ::PluginStore.get('steam', "steam_uid_#{steam_uid}")
+    current_info = ::PluginStore.get('steam_uid', {steam_uid})
 
     result.user =
       if current_info
@@ -45,7 +45,8 @@ class SteamAuthenticator < ::Auth::Authenticator
 
   def after_create_account(user, auth)
     data = auth[:extra_data]
-    ::PluginStore.set('steam', "steam_uid_#{data[:steam_uid]}", {user_id: user.id })
+    ::PluginStore.set('steam_uid', {data[:steam_uid]}, {user_id: user.id })
+    ::PluginStore.set('steam_user', {user_id: user.id }, {data[:steam_uid]})
 
     retrieve_avatar(user, data[:image])
   end
