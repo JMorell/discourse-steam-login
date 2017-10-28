@@ -47,7 +47,7 @@ class SteamAuthenticator < ::Auth::Authenticator
     data = auth[:extra_data]
     ::PluginStore.set('steam_uid', "#{data[:steam_uid]}", {user_id: user.id })
     ::PluginStore.set('steam_user', user.id, "#{data[:steam_uid]}")
-
+	user.custom_fields["steam_uid"] = "#{data[:steam_uid]}"
     retrieve_avatar(user, data[:image])
   end
 
